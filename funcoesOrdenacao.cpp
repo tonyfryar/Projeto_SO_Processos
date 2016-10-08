@@ -1,10 +1,62 @@
+
+
+#include <fstream>
+#include <cstring>
 #include <iostream>
+#include <string>
+#include "funcoesOrdenacao.h"
 using namespace std;
+
+void insertionSortString(string* vetor, int fim, int inicio){
+    int ii, jj; 
+    string chave;
+    cout << "insertion" << endl; 
+
+    for (ii = 1; ii <= fim; ii++){
+        chave = vetor[ii];
+        jj = ii - 1;
+
+        while ((jj >= 0) && (chave.compare(vetor[jj]) < 0)){
+            vetor[jj + 1] = vetor[jj];
+            jj = jj - 1;
+        }
+        vetor[jj + 1] = chave;
+    }
+}
+
+//Função para trocar elementos do vetor
+void troca (string vetor[], int esq, int dir){
+    string aux = vetor[esq];
+    vetor[esq] = vetor[dir];
+    vetor[dir] = aux;
+}
+
+//QuickSort
+void quickSortString(string vetor[], int fim, int inicio){
+    int esq, dir;
+    esq = inicio;
+    dir = fim;
+    if (dir - esq >= 1){
+        string pivo = vetor[esq];
+        while (esq < dir){
+            while (vetor[esq].compare(pivo) <= 0 && esq <= fim && dir > esq)
+                esq++;
+            while (vetor[dir].compare(pivo) > 0 && dir >= inicio && dir >= esq)
+                dir--;
+            if (esq < dir)
+                troca(vetor, esq, dir);
+        }
+        vetor[inicio] = vetor[dir];
+        vetor[dir] = pivo;
+
+        quickSortString(vetor, dir-1, inicio);
+        quickSortString(vetor, fim, dir+1);   
+    }
+}
 
 void insertionSort(int* vetor, int fim, int inicio){
     int ii, jj; 
     int chave;
-    cout << "insertion" << endl; 
 
     for (ii = 1; ii <= fim; ii++){
         chave = vetor[ii];
@@ -17,17 +69,6 @@ void insertionSort(int* vetor, int fim, int inicio){
         vetor[jj + 1] = chave;
     }
 }
-
-/*
-Função para trocar elementos do vetor
-*/
-void troca (int vetor[], int esq, int dir){
-    int aux = vetor[esq];
-    vetor[esq] = vetor[dir];
-    vetor[dir] = aux;
-}
-
-
 void quickSort(int *vet, int esq, int dir){
 
     int pivo = esq, i,ch,j;         //Declaração das variavés e inicialização do pivo com o primeiro algarismo da sequencia
@@ -70,7 +111,6 @@ void quickSort(int *vet, int esq, int dir){
 
  }
 
-
 void selection_sort(int num[], int tam) 
 { 
   int i, j, min, aux;
@@ -87,4 +127,85 @@ void selection_sort(int num[], int tam)
        num[min] = aux;
      }
   }
+}
+
+void ordenarTextoInsertion(char* argv){
+        ifstream infile;
+       
+        infile.open(argv);
+
+        if (!infile.is_open())
+            cout << "Arquivo não encotrado" << endl;
+        
+        else{
+            ofstream outfile;
+            outfile.open(argv);
+            string palavras[MAXPALAVRAS];
+            int ii;
+
+            for(ii=0; infile >> palavras[ii]; ii++)
+                //cout << palavras[ii] << endl;
+
+            insertionSortString(palavras, ii, 0);
+            //quickSort(palavras, ii, 0);
+            //ordenaTexto( palavras, ii, 0, selecionaFuncao(1));
+            //ordenaTexto(palavras, ii, 0, pFuncao);
+
+            for(int jj=0; jj < ii; jj++)
+                outfile << palavras[jj] << endl;
+        }
+    }
+
+void ordenarTextoQuick(char* argv){
+
+    ifstream infile;
+    
+    infile.open(argv);
+
+    if (!infile.is_open())
+        cout << "Arquivo não encotrado" << endl;
+    
+    else{
+        ofstream outfile;
+        outfile.open(argv);
+        string palavras[MAXPALAVRAS];
+        int ii;
+
+        for(ii=0; infile >> palavras[ii]; ii++)
+            //cout << palavras[ii] << endl;
+
+        //insertionSort(palavras, ii, 0);
+        quickSortString(palavras, ii, 0);
+        //ordenaTexto( palavras, ii, 0, selecionaFuncao(1));
+        //ordenaTexto(palavras, ii, 0, pFuncao);
+
+        for(int jj=0; jj < ii; jj++)
+            outfile << palavras[jj] << endl;
+    }
+}
+
+void ordenarTextoSelection(char* argv){
+    ifstream infile;
+    infile.open(argv);
+
+    if (!infile.is_open())
+        cout << "Arquivo não encotrado" << endl;
+    
+    else{
+        ofstream outfile;
+        outfile.open(argv);
+        string palavras[MAXPALAVRAS];
+        int ii;
+
+        for(ii=0; infile >> palavras[ii]; ii++)
+            //cout << palavras[ii] << endl;
+
+        //insertionSort(palavras, ii, 0);
+        //quickSort(palavras, ii, 0);
+        //ordenaTexto( palavras, ii, 0, selecionaFuncao(1));
+        //ordenaTexto(palavras, ii, 0, pFuncao);
+
+        for(int jj=0; jj < ii; jj++)
+            outfile << palavras[jj] << endl;
+    }
 }
